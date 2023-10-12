@@ -17,21 +17,14 @@ using System.Windows.Shapes;
 namespace SensorMonitorServer
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Логика взаимодействия для SensorView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SensorView : StackPanel
     {
-        public MainWindow()
+        public SensorView()
         {
             InitializeComponent();
-            sensor.Content = new SensorView();
-            SensorViewModel.UpdateNotificationEvent += (text) =>
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    toast.Text = text;
-                });
-            };
+            DataContext = new SensorViewModel();
         }
     }
 }

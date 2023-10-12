@@ -1,0 +1,15 @@
+﻿<StackPanel x:Class="SensorMonitorServer.SensorView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:SensorMonitorServer"
+      mc:Ignorable="d" 
+      d:DesignHeight="400" d:DesignWidth="400" d:Background="#fff">
+
+    <TextBlock x:Name="host" Text="{Binding host}" FontSize="19" TextWrapping="Wrap"/>
+    <TextBlock Name="type" Text="{Binding sensorType}" FontSize="24" TextWrapping="Wrap"/>
+    <TextBlock Name="time" Text="{Binding timeStap}" FontSize="24" TextWrapping="Wrap"/>
+    <TextBlock Name="values" Text="{Binding values}" FontSize="24" TextWrapping="Wrap"/>
+
+</StackPanel>

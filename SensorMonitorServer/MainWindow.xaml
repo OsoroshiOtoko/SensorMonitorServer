@@ -5,8 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SensorMonitorServer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="650" Width="1000"
+        Background="#DCDCDC">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Frame Name="sensor" Grid.Column="0" Margin="16"/>            
+
+        <TextBlock x:Name="toast"
+                   d:Text="TestToastShow"
+                   FontSize="16"
+                   Foreground="#ff3224"
+                   VerticalAlignment="Bottom"
+                   Grid.Column="0"
+                   Margin="16"
+                   TextWrapping="Wrap"/>
+
+        <GridSplitter Grid.Column="1" 
+                      ShowsPreview="False" 
+                      Width="2"  
+                      HorizontalAlignment="Center" 
+                      VerticalAlignment="Stretch"
+                      Background="#000000"/>
+
+        <Frame Name="box" Grid.Column="2"/>
 
     </Grid>
 </Window>

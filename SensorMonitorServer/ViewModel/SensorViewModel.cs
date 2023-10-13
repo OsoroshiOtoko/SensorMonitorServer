@@ -13,38 +13,42 @@ namespace SensorMonitorServer.ViewModel
 {
     internal class SensorViewModel : INotifyPropertyChanged
     {
-        public static TcpClient client;
-        private static TcpListener listener;
-        private static IPAddress address;
-        private Sensor sensor;
+        public static TcpClient? client;
+        private static TcpListener? listener;
+        private static IPAddress? address;
+        private static Sensor? sensor;
 
         public delegate void UpdateNotificationDelegate(string text);
-        public static event UpdateNotificationDelegate UpdateNotificationEvent;
+        public static event UpdateNotificationDelegate? UpdateNotificationEvent;
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public string host { get; private set; }
         public string sensorType { get => "SensorType: " + sensor?.sensorType; }
         public string timeStap { get => "TimeStap: " + sensor?.time.ToString(); }
         public string values { get => "Values:" + sensor?.GetValuesString(); }
-        
+
+        public static float[] val = sensor?.values;
+
+
         public SensorViewModel()
         {
             address = Dns.GetHostAddresses(Dns.GetHostName()).Last(x => x.AddressFamily == AddressFamily.InterNetwork);
-            
+
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse(address.ToString()), 5656);
             listener = new TcpListener(ep);
             listener.Start();
 
             host = $"{ep.Address}:{ep.Port}";
 
-            Task.Run( () =>
+
+            Task.Run(() =>
             {
-                Exception exc = null;
+                Exception? exc = null;
                 while (true)
                 {
 
                     client = listener.AcceptTcpClient();
-                    if(client.Connected) UpdateNotificationEvent?.Invoke("Client connected!");
+                    if (client.Connected) UpdateNotificationEvent?.Invoke("Client connected!");
 
                     while (client.Connected)
                     {
@@ -58,6 +62,8 @@ namespace SensorMonitorServer.ViewModel
                             client.GetStream().Read(buffer, 0, bufferLength);
 
                             sensor = JsonSerializer.Deserialize<Sensor>(buffer);
+
+                            val = sensor?.values;
 
                             OnPropertyChanged(nameof(sensorType));
                             OnPropertyChanged(nameof(timeStap));

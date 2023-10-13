@@ -7,4 +7,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="HelixToolkit.Wpf" Version="2.24.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="CubeView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

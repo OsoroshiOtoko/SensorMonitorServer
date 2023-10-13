@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SensorMonitorServer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="1000"
+        Title="SensorMonitorServer" Height="650" Width="1000"
         Background="#DCDCDC">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -33,6 +33,7 @@
                       Background="#000000"/>
 
         <Frame Name="box" Grid.Column="2"/>
+        <Viewport3D x:Name="vp" Grid.Column="2"/>
 
     </Grid>
 </Window>

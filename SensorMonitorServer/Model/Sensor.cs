@@ -9,7 +9,7 @@ namespace SensorMonitorServer
 {
     internal class Sensor
     {
-        public string sensorType { get; set; }
+        public string? sensorType { get; set; }
         public long time { get; set; } 
         public float[] values { get; set; }
 
@@ -23,6 +23,6 @@ namespace SensorMonitorServer
             return s;
         }
 
-        
+        public float[] GetValue() => values;
     }
 }

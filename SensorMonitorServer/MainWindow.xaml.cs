@@ -24,7 +24,11 @@ namespace SensorMonitorServer
         public MainWindow()
         {
             InitializeComponent();
+
             sensor.Content = new SensorView();
+            box.Content = new CubeView();
+            //vp.DataContext = new CubeView();
+
             SensorViewModel.UpdateNotificationEvent += (text) =>
             {
                 Dispatcher.Invoke(() =>

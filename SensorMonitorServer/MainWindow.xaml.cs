@@ -27,7 +27,6 @@ namespace SensorMonitorServer
 
             sensor.Content = new SensorView();
             box.Content = new CubeView();
-            //vp.DataContext = new CubeView();
 
             SensorViewModel.UpdateNotificationEvent += (text) =>
             {

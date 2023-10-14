@@ -8,8 +8,8 @@
       d:DesignHeight="400" d:DesignWidth="400" d:Background="#fff">
 
     <TextBlock x:Name="host" Text="{Binding host}" FontSize="19" TextWrapping="Wrap"/>
-    <TextBlock Name="type" Text="{Binding sensorType}" FontSize="24" TextWrapping="Wrap"/>
-    <TextBlock Name="time" Text="{Binding timeStap}" FontSize="24" TextWrapping="Wrap"/>
-    <TextBlock Name="values" Text="{Binding values}" FontSize="24" TextWrapping="Wrap"/>
+    <TextBlock x:Name="type" Text="{Binding sensorType}" FontSize="24" TextWrapping="Wrap"/>
+    <TextBlock x:Name="name" Text="{Binding sensorName}" FontSize="24" TextWrapping="Wrap"/>
+    <TextBlock x:Name="values" Text="{Binding values}" FontSize="24" TextWrapping="Wrap"/>
 
 </StackPanel>

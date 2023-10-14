@@ -7,50 +7,105 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using SensorMonitorServer.ViewModel;
 
 namespace SensorMonitorServer
 {
     internal class TCPServer
-    {/*
+    {
+        public static bool isConnected = false;
+
         public static TcpClient client;
         private static TcpListener listener;
         public static IPAddress address;
 
-        static void Main(string[] args)
+        public delegate void UpdateViewDelegate(string text);
+        public static event UpdateViewDelegate? UpdateViewEvent;
+
+        public static IPEndPoint ServerStart()
         {
             address = Dns.GetHostAddresses(Dns.GetHostName()).Last(x => x.AddressFamily == AddressFamily.InterNetwork);
 
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse(address.ToString()), 5656);
             listener = new TcpListener(ep);
             listener.Start();
-            
-            //ep.Address, ep.Port
-            client = listener.AcceptTcpClient();            
 
-
-            while (client.Connected)
+            Task.Run(async () => 
             {
-                try
+                while (true)
                 {
-                    byte[] lengthBytes = new byte[4];
-                    client.GetStream().Read(lengthBytes, 0, 4);
+                    Sensor.sensorName = "";
+                    Sensor.sensorType = "";
+                    Sensor.values = new float[] { 0 };
 
-                    int bufferLength = BitConverter.ToInt32(lengthBytes, 0);
-                    byte[] buffer = new byte[bufferLength];
-                    client.GetStream().Read(buffer, 0, bufferLength);
+                    if (client == null || !client.Connected)
+                    {
+                        SensorViewModel.Toast("Wait client connection...");
+                        client = await listener.AcceptTcpClientAsync();
+                    }
+                    SensorViewModel.Toast("Client connected!");
 
-                    Sensor? sensor = JsonSerializer.Deserialize<Sensor>(buffer);
+                    int n = -2;
+                    while (client.Connected && n < 0)
+                    {
+                        try
+                        {
+                            byte[] lengthBytes = new byte[4];
+                            client.GetStream().Read(lengthBytes, 0, 4);
+
+                            int bufferLength = BitConverter.ToInt32(lengthBytes, 0);
+                            byte[] buffer = new byte[bufferLength];
+                            client.GetStream().Read(buffer, 0, bufferLength);
+
+                            if (bufferLength > 4)
+                            {
+                                switch (n)
+                                {
+                                    case -2:
+                                        Sensor.sensorName = JsonSerializer.Deserialize<string>(buffer);
+                                        n++;
+                                        break;
+                                    case -1:
+                                        Sensor.sensorType = JsonSerializer.Deserialize<string>(buffer);
+                                        n++;
+                                        break;
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            SensorViewModel.Toast(ex.Message);
+                            client.Dispose();
+                            client.Close();
+                        }
+                    }
+
+                    while (n > -1)
+                    {
+                        try
+                        {
+                            byte[] lengthBytes = new byte[4];
+                            client.GetStream().Read(lengthBytes, 0, 4);
+                            int bufferLength = BitConverter.ToInt32(lengthBytes, 0);
+                            byte[] buffer = new byte[bufferLength];
+
+                            client.GetStream().Read(buffer, 0, bufferLength);
+                            Sensor.values = JsonSerializer.Deserialize<float[]>(buffer);
+                        }
+                        catch (Exception ex)
+                        {
+                            SensorViewModel.Toast(ex.Message);
+                            await Task.Delay(10_000); //miliseconds
+                            n = -2;
+                            //client.Dispose();
+                            //client.Close();
+                        }
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    client.Dispose();
-                    client.Close();
-                }
-            }
-        }*/
+            });
 
+            return ep;
+        }
         
-
     }
 }

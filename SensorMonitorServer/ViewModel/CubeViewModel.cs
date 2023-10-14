@@ -14,6 +14,9 @@ namespace SensorMonitorServer.ViewModel
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private double _rotationAngleX;
+        private double _rotationAngleY;
+        private double _rotationAngleZ;
+
         public double RotationAngleX
         {
             get { return _rotationAngleX; }
@@ -23,8 +26,7 @@ namespace SensorMonitorServer.ViewModel
                 OnPropertyChanged(nameof(RotationAngleX));
             }
         }
-
-        private double _rotationAngleY;
+        
         public double RotationAngleY
         {
             get { return _rotationAngleY; }
@@ -34,8 +36,7 @@ namespace SensorMonitorServer.ViewModel
                 OnPropertyChanged(nameof(RotationAngleY));
             }
         }
-
-        private double _rotationAngleZ;
+        
         public double RotationAngleZ
         {
             get { return _rotationAngleZ; }
@@ -52,11 +53,12 @@ namespace SensorMonitorServer.ViewModel
             {
                 while (true)
                 {
-                    if (SensorViewModel.val?.Length >= 3)
+                    float[] rot = Sensor.values;
+                    if (rot.Length >= 3)
                     {
-                        RotationAngleX = SensorViewModel.val[0];
-                        RotationAngleY = SensorViewModel.val[1];
-                        RotationAngleZ = SensorViewModel.val[2];
+                        RotationAngleX = rot[0];
+                        RotationAngleY = rot[1];
+                        RotationAngleZ = rot[2];
                     }
                 }
             });

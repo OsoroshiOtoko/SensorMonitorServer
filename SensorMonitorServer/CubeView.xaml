@@ -6,8 +6,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:helix="http://helix-toolkit.org/wpf"
       xmlns:local="clr-namespace:SensorMonitorServer"
-    mc:Ignorable="d" 
-      d:DesignHeight="400" d:DesignWidth="400">
+      mc:Ignorable="d" 
+      d:DesignHeight="400" d:DesignWidth="400"
+      IsHeadLightEnabled="True" ZoomExtentsWhenLoaded="False" CameraMode="Inspect" ShowCameraInfo="False">
 
 
     <ModelVisual3D x:Name="modelVisual">
@@ -33,10 +34,11 @@
     </ModelVisual3D>
 
     <helix:HelixViewport3D.Camera>
-        <PerspectiveCamera Position="0 0 7"
-                           LookDirection="0 0 -1"
-                           UpDirection="0 1 0"
+        <PerspectiveCamera Position="-3.564 -2.333 0.94"
+                           LookDirection="2.252 1.974 -0.827"
+                           UpDirection="0.687 0.597 0.415"
                            FieldOfView="60"/>
     </helix:HelixViewport3D.Camera>
+
 
 </helix:HelixViewport3D>

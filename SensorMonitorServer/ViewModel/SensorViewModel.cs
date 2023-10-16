@@ -15,7 +15,7 @@ using System.Windows;
 
 namespace SensorMonitorServer.ViewModel
 {
-    internal class SensorViewModel : Window, INotifyPropertyChanged
+    internal class SensorViewModel : INotifyPropertyChanged
     {
         private static Sensor sensor = new Sensor();
 

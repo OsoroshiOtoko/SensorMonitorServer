@@ -36,10 +36,10 @@ namespace SensorMonitorServer
                 });
             };
 
-            /*Closed += (sender, e) =>
+            Closing += (sender, e) =>
             {
                 TCPServer.ServerStop();
-            };*/
+            };
         }
     }
 }

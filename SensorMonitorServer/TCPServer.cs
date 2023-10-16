@@ -76,19 +76,20 @@ namespace SensorMonitorServer
             byte[] lengthBytes = new byte[4];
             int bufferLength;
             byte[] buffer;
-            byte[] code = new byte[1];
+            byte[] code = new byte[4];
 
             try
             {
-                stream.Read(code, 0, 1);
-                switch (code[0])
+                stream.Read(code, 0, 4);
+                if (code[0] == 0) client.Close();
+                switch (code[0]) 
                 { 
                     case 7:
                         {
                             stream.WriteByte(8);
 
                             stream.Read(lengthBytes, 0, 4);
-                            Task.Delay(10);
+                            Task.Delay(3);
                             bufferLength = BitConverter.ToInt32(lengthBytes, 0);
                             buffer = new byte[bufferLength];
                             stream.Read(buffer, 0, bufferLength);
@@ -96,7 +97,7 @@ namespace SensorMonitorServer
                         }
                     case 2:
                         {
-                            return new byte[0];
+                            return new byte[1] { 0 };
                         }
                 }
             }
@@ -107,15 +108,21 @@ namespace SensorMonitorServer
                 client.Dispose();
                 client.Close();
             }
-            return new byte[0];
+            return new byte[1] { 0 };
         }
 
         public static void ServerStop()
         {
-            //client.GetStream().WriteByte(1);
-            //client.Dispose();
-            //client.Close();
-            listener.AcceptTcpClient();
+            try
+            {
+                //client.GetStream().WriteByte(1);
+                //client.Dispose();
+                client.Close();
+            }
+            finally
+            {
+                listener.Stop();
+            }
         }
     }
 }

@@ -35,6 +35,11 @@ namespace SensorMonitorServer
                     toast.Text = text;
                 });
             };
+
+            /*Closed += (sender, e) =>
+            {
+                TCPServer.ServerStop();
+            };*/
         }
     }
 }

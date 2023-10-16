@@ -11,10 +11,11 @@ using System.Runtime.CompilerServices;
 using System.Collections;
 using HelixToolkit.Wpf;
 using System.Windows.Threading;
+using System.Windows;
 
 namespace SensorMonitorServer.ViewModel
 {
-    internal class SensorViewModel : INotifyPropertyChanged
+    internal class SensorViewModel : Window, INotifyPropertyChanged
     {
         private static Sensor sensor = new Sensor();
 
@@ -40,17 +41,12 @@ namespace SensorMonitorServer.ViewModel
 
             Sensor.UpdateViewEvent += OnPropertyChanged;
 
-            //TCPServer.UpdateViewEvent += OnPropertyChanged;
-
+            //TCPServer.UpdateViewEvent += OnPropertyChanged;           
 
         }
 
 
-
-        public static void Toast(string text)
-        {
-            UpdateNotificationEvent?.Invoke(text);
-        }
+        public static void Toast(string text) => UpdateNotificationEvent?.Invoke(text);
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {

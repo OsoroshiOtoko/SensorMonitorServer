@@ -32,7 +32,7 @@ namespace SensorMonitorServer
 
             Task.Run(async () => 
             {
-                while (true)
+                while (listener != null)
                 {
                     Sensor.sensorName = "";
                     Sensor.sensorType = "";
@@ -45,67 +45,77 @@ namespace SensorMonitorServer
                     }
                     SensorViewModel.Toast("Client connected!");
 
-                    int n = -2;
-                    while (client.Connected && n < 0)
+                    Sensor.sensorName = JsonSerializer.Deserialize<string>(Read());
+                    Sensor.sensorType = JsonSerializer.Deserialize<string>(Read());                    
+
+                    while (client.Connected)
                     {
-                        try
-                        {
-                            byte[] lengthBytes = new byte[4];
-                            client.GetStream().Read(lengthBytes, 0, 4);
-
-                            int bufferLength = BitConverter.ToInt32(lengthBytes, 0);
-                            byte[] buffer = new byte[bufferLength];
-                            client.GetStream().Read(buffer, 0, bufferLength);
-
-                            if (bufferLength > 4)
-                            {
-                                switch (n)
-                                {
-                                    case -2:
-                                        Sensor.sensorName = JsonSerializer.Deserialize<string>(buffer);
-                                        n++;
-                                        break;
-                                    case -1:
-                                        Sensor.sensorType = JsonSerializer.Deserialize<string>(buffer);
-                                        n++;
-                                        break;
-                                }
-                            }
+                        try 
+                        { 
+                            Sensor.values = JsonSerializer.Deserialize<float[]>(Read()); 
                         }
                         catch (Exception ex)
                         {
                             SensorViewModel.Toast(ex.Message);
-                            client.Dispose();
-                            client.Close();
-                        }
-                    }
-
-                    while (n > -1)
-                    {
-                        try
-                        {
-                            byte[] lengthBytes = new byte[4];
-                            client.GetStream().Read(lengthBytes, 0, 4);
-                            int bufferLength = BitConverter.ToInt32(lengthBytes, 0);
-                            byte[] buffer = new byte[bufferLength];
-
-                            client.GetStream().Read(buffer, 0, bufferLength);
-                            Sensor.values = JsonSerializer.Deserialize<float[]>(buffer);
-                        }
-                        catch (Exception ex)
-                        {
-                            SensorViewModel.Toast(ex.Message);
-                            await Task.Delay(10_000); //miliseconds
-                            n = -2;
+                            await Task.Delay(1_000); //miliseconds
+                            break;
                             //client.Dispose();
                             //client.Close();
                         }
+
                     }
-                }
+                }                
             });
 
             return ep;
         }
         
+        public static byte[] Read()
+        {
+            NetworkStream stream = client.GetStream();
+            byte[] lengthBytes = new byte[4];
+            int bufferLength;
+            byte[] buffer;
+            byte[] code = new byte[1];
+
+            try
+            {
+                stream.Read(code, 0, 1);
+                switch (code[0])
+                { 
+                    case 7:
+                        {
+                            stream.WriteByte(8);
+
+                            stream.Read(lengthBytes, 0, 4);
+                            Task.Delay(10);
+                            bufferLength = BitConverter.ToInt32(lengthBytes, 0);
+                            buffer = new byte[bufferLength];
+                            stream.Read(buffer, 0, bufferLength);
+                            return buffer;
+                        }
+                    case 2:
+                        {
+                            return new byte[0];
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                SensorViewModel.Toast(ex.Message);
+                stream.WriteByte(1);
+                client.Dispose();
+                client.Close();
+            }
+            return new byte[0];
+        }
+
+        public static void ServerStop()
+        {
+            //client.GetStream().WriteByte(1);
+            //client.Dispose();
+            //client.Close();
+            listener.AcceptTcpClient();
+        }
     }
 }

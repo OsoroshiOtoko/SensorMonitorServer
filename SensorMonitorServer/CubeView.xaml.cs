@@ -1,22 +1,7 @@
 ﻿using HelixToolkit.Wpf;
 using SensorMonitorServer.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.IO;
+using Path = System.IO.Path;
 
 namespace SensorMonitorServer
 {
@@ -31,7 +16,8 @@ namespace SensorMonitorServer
 
             DataContext = new CubeViewModel();
 
-            var model3D = new ModelImporter().Load("F:/VSProjects/Git/SensorMonitorServer/SensorMonitorServer/object/cube.obj");
+            var u = Directory.GetCurrentDirectory();
+            var model3D = new ModelImporter().Load(Path.Combine(Directory.GetCurrentDirectory(), "cube.obj"));
             modelVisual.Content = model3D;         
         }
     }

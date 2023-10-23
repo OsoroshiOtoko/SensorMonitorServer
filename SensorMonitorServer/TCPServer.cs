@@ -124,9 +124,12 @@ namespace SensorMonitorServer
         {
             try
             {
-                //client.GetStream().WriteByte(1);
-                //client.Dispose();
-                client.Close();
+                if (client != null)
+                {
+                    //client.GetStream().WriteByte(1);
+                    //client.Dispose();
+                    client.Close();
+                }
             }
             finally
             {

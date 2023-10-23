@@ -45,8 +45,17 @@ namespace SensorMonitorServer
                     }
                     SensorViewModel.Toast("Client connected!");
 
-                    Sensor.sensorName = JsonSerializer.Deserialize<string>(Read());
-                    Sensor.sensorType = JsonSerializer.Deserialize<string>(Read());                    
+                    try
+                    {
+                        Sensor.sensorName = JsonSerializer.Deserialize<string>(Read());
+                        Sensor.sensorType = JsonSerializer.Deserialize<string>(Read());
+                    }
+                    catch (Exception ex)
+                    {
+                        SensorViewModel.Toast(ex.Message);
+                        await Task.Delay(1_000); //miliseconds
+                        break;
+                    }
 
                     while (client.Connected)
                     {
@@ -81,7 +90,7 @@ namespace SensorMonitorServer
             try
             {
                 stream.Read(code, 0, 4);
-                if (code[0] == 0) client.Close();
+                if (code[0] == 0) client.Close(); 
                 switch (code[0]) 
                 { 
                     case 7:

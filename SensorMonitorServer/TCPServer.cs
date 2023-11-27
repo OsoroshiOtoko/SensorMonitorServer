@@ -45,6 +45,10 @@ namespace SensorMonitorServer
                     }
                     SensorViewModel.Toast("Client connected!");
 
+                    Sensor.sensorName = "";
+                    Sensor.sensorType = "";
+                    Sensor.values = new float[] { 0 };
+
                     try
                     {
                         Sensor.sensorName = JsonSerializer.Deserialize<string>(Read());
@@ -61,7 +65,8 @@ namespace SensorMonitorServer
                     {
                         try 
                         { 
-                            Sensor.values = JsonSerializer.Deserialize<float[]>(Read()); 
+                            Sensor.values = JsonSerializer.Deserialize<float[]>(Read());
+                            SensorView.valuesY.Add(Sensor.values);
                         }
                         catch (Exception ex)
                         {

@@ -14,7 +14,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Frame Name="sensor" Grid.Column="0" Margin="16"/>            
+        <ScrollViewer>
+            <Frame Name="sensor" Grid.Column="0" Margin="16"/>
+        </ScrollViewer>
 
         <TextBlock x:Name="toast"
                    d:Text="TestToastShow"
@@ -34,6 +36,5 @@
 
         <Frame Name="box" Grid.Column="2"/>
         <Viewport3D x:Name="vp" Grid.Column="2"/>
-
     </Grid>
 </Window>
